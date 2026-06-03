@@ -11,7 +11,7 @@ export default function Footer() {
         {/* 🌐 Your Active Social Media Portals Layout */}
         <div className="flex items-center gap-6 text-sm font-medium text-slate-400">
           <a 
-            href="https://github.com/your-username" 
+            href="https://github.com/Aryanjx" 
             target="_blank" 
             rel="noreferrer" 
             className="hover:text-teal-400 transition-colors"
@@ -19,7 +19,7 @@ export default function Footer() {
             GitHub
           </a>
           <a 
-            href="https://linkedin.com/in/your-profile" 
+            href="https://www.linkedin.com/in/aryan-sinha-544552369/" 
             target="_blank" 
             rel="noreferrer" 
             className="hover:text-teal-400 transition-colors"
@@ -27,7 +27,7 @@ export default function Footer() {
             LinkedIn
           </a>
           <a 
-            href="https://twitter.com/your-handle" 
+            href="https://twitter.com/arceus-29" 
             target="_blank" 
             rel="noreferrer" 
             className="hover:text-teal-400 transition-colors"

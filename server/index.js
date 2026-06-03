@@ -1,12 +1,12 @@
+import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import formRoutes from './routes/form.js';
 import aiRoutes from './routes/ai.js'; 
 import authRoutes from './routes/auth.js';
 // 1. Import your brand new payment and subscription router
-import paymentRoutes from './routes/payment.js';
+import paymentRoutes from './routes/payments.js';
 
 // Load environmental variables from your .env file
 dotenv.config();

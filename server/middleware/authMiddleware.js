@@ -1,19 +1,30 @@
 import jwt from 'jsonwebtoken';
+import User from '../models/User.js';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback_super_secret_key_change_this';
+export const requireAuth = async (req, res, next) => {
+  const { authorization } = req.headers;
 
-export const requireAuth = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1]; // Expects "Bearer <token>"
-
-  if (!token) {
-    return res.status(401).json({ message: 'Access denied. No authentication token provided.' });
+  if (!authorization || !authorization.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'Authorization token required' });
   }
 
+  const token = authorization.split(' ')[1];
+
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    req.userId = decoded.userId; // Attaches the log-in user ID to the request object
+    // Decode matching the EXACT key name from your login route (userId)
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback_super_secret_key_change_this');
+    
+    // Find user using decoded.userId
+    const user = await User.findById(decoded.userId).select('-password');
+    
+    if (!user) {
+      return res.status(401).json({ message: 'User account not found.' });
+    }
+
+    req.user = user; // Safely populates user profile for the premium gate middleware
     next();
   } catch (error) {
-    return res.status(401).json({ message: 'Invalid or expired session token.' });
+    console.error("Authentication middleware validation failure:", error);
+    res.status(401).json({ message: 'Request is not authorized' });
   }
 };

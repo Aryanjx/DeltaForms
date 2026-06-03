@@ -1,5 +1,6 @@
 import express from 'express';
-import Form from '../models/Form.js';
+// Change this line to use curly braces around Form
+import { Form } from '../models/Form.js';
 import Submission from '../models/Submission.js';
 
 const router = express.Router();

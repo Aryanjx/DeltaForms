@@ -10,18 +10,23 @@ export default function Auth({ onAuthSuccess }) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
     
+    // 💡 THE FIX: Strip out the username field if the user is logging in
+    const payload = isLogin 
+      ? { email: formData.email, password: formData.password } 
+      : formData;
+
     try {
       const response = await fetch(`http://127.0.0.1:5000${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload), // Send the cleaned payload here!
       });
 
       const data = await response.json();
@@ -30,7 +35,7 @@ export default function Auth({ onAuthSuccess }) {
         throw new Error(data.message || 'Authentication failed');
       }
 
-      // Save token and user info to local storage
+      // Save token and user info to local storage securely
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       

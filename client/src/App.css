@@ -1,3 +1,40 @@
+@import "tailwindcss";
+
+/* 💡 GLOBAL LAYOUT BINDINGS: Force the entire HTML scope to use our dynamic system */
+html, body, #root {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* ☀️ LIGHT THEME STATE PARAMETERS */
+:root {
+  --bg-main: #f8fafc;         /* Slate-50 background for light mode */
+  --bg-surface: #ffffff;      /* Pure white for pricing cards/menus */
+  --text-main: #0f172a;       /* Dark slate text */
+  --text-muted: #475569;      /* Slate-600 description text */
+  --accent: #4f46e5;          /* Indigo-600 primary brand buttons */
+  --accent-bg: #f1f5f9;       /* Slate-100 button background */
+  --accent-border: #cbd5e1;   /* Slate-300 elements */
+  --border: #e2e8f0;          /* Slate-200 lines */
+  --social-bg: #ffffff;
+  --text-h: #0f172a;
+}
+
+/* 🌙 DARK THEME STATE PARAMETERS (Automatically active when .dark class is added) */
+.dark {
+  --bg-main: #020617;         /* Slate-950 canvas background */
+  --bg-surface: #0f172a;      /* Slate-900 surface panels */
+  --text-main: #f8fafc;       /* Crisp slate-50 active typography */
+  --text-muted: #94a3b8;      /* Slate-400 description blocks */
+  --accent: #2dd4bf;          /* Teal-400 primary branding components */
+  --accent-bg: #0f172a;       /* Slate-900 background layers */
+  --accent-border: #1e293b;   /* Slate-800 accents */
+  --border: #1e293b;          /* Slate-800 line blocks */
+  --social-bg: #1e293b;
+  --text-h: #f8fafc;
+}
+
 .counter {
   font-size: 16px;
   padding: 5px 10px;

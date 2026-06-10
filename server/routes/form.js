@@ -1,24 +1,37 @@
 import express from 'express';
-// Change this line to use curly braces around Form
 import { Form } from '../models/Form.js';
-import Submission from '../models/Submission.js';
+import { requireAuth } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
+router.use(requireAuth);
+
+/**
+ * @route   GET /api/forms
+ * @desc    List all saved forms for the authenticated user
+ */
+router.get('/', async (req, res) => {
+  try {
+    const forms = await Form.find({ userId: req.user._id }).sort({ createdAt: -1 });
+    res.status(200).json(forms);
+  } catch (error) {
+    res.status(500).json({ message: 'Error loading saved forms', error: error.message });
+  }
+});
 
 /**
  * @route   POST /api/forms
- * @desc    Save a newly created dynamic form structure
+ * @desc    Save a newly created dynamic form structure for the authenticated user
  */
 router.post('/', async (req, res) => {
   try {
     const { formTitle, fields } = req.body;
 
-    // Quick structural validation
     if (!formTitle || !fields || !Array.isArray(fields)) {
       return res.status(400).json({ message: 'Missing formTitle or structural fields array.' });
     }
 
     const newForm = new Form({
+      userId: req.user._id,
       formTitle,
       fields
     });
@@ -32,11 +45,11 @@ router.post('/', async (req, res) => {
 
 /**
  * @route   GET /api/forms/:id
- * @desc    Fetch a specific form structure by its unique ID
+ * @desc    Fetch a specific form structure by its unique ID for the authenticated user
  */
 router.get('/:id', async (req, res) => {
   try {
-    const form = await Form.findById(req.id || req.params.id);
+    const form = await Form.findOne({ _id: req.params.id, userId: req.user._id });
     if (!form) {
       return res.status(404).json({ message: 'Form layout not found.' });
     }
@@ -47,29 +60,18 @@ router.get('/:id', async (req, res) => {
 });
 
 /**
- * @route   POST /api/forms/:id/submissions
- * @desc    Submit filled-out user data responses for a specific form
+ * @route   DELETE /api/forms/:id
+ * @desc    Delete a saved form for the authenticated user
  */
-router.post('/:id/submissions', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
-    const { responses } = req.body;
-    const formId = req.params.id;
-
-    // Verify the host form actually exists first
-    const formExists = await Form.exists({ _index: formId, _id: formId });
-    if (!formExists) {
-      return res.status(404).json({ message: 'Cannot submit; parent form not found.' });
+    const deleted = await Form.findOneAndDelete({ _id: req.params.id, userId: req.user._id });
+    if (!deleted) {
+      return res.status(404).json({ message: 'Could not delete form; not found or not owned by user.' });
     }
-
-    const newSubmission = new Submission({
-      formId,
-      responses
-    });
-
-    const savedSubmission = await newSubmission.save();
-    res.status(201).json({ message: 'Submission logged successfully!', data: savedSubmission });
+    res.status(200).json({ message: 'Form deleted successfully.' });
   } catch (error) {
-    res.status(500).json({ message: 'Error writing submission records', error: error.message });
+    res.status(500).json({ message: 'Error deleting saved form', error: error.message });
   }
 });
 

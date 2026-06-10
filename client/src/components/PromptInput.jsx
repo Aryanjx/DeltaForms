@@ -11,8 +11,14 @@ export default function PromptInput({ onFormGenerated, onErrorCatch }) {
     setLoading(true);
     onErrorCatch(''); // Clear any historic errors
 
+    const token = localStorage.getItem('token');
+    if (!token) {
+      onErrorCatch('Login required to generate AI layouts. Please sign in.');
+      setLoading(false);
+      return;
+    }
+
     try {
-      const token = localStorage.getItem('token');
       const response = await fetch('http://localhost:5000/api/ai/generate-layout', {
         method: 'POST',
         headers: {
@@ -24,8 +30,15 @@ export default function PromptInput({ onFormGenerated, onErrorCatch }) {
 
       const data = await response.json();
 
+      if (response.status === 401) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        onErrorCatch('Session expired or invalid token. Please log in again.');
+        window.location.reload();
+        return;
+      }
+
       if (!response.ok) {
-        // ✅ OPTIMIZED: Route all errors to your UI banner instead of raw browser alerts
         onErrorCatch(data.message || 'Generation pipeline failed.');
         return;
       }
@@ -33,7 +46,7 @@ export default function PromptInput({ onFormGenerated, onErrorCatch }) {
       onFormGenerated(data);
       setPrompt('');
     } catch (err) {
-      console.error("Network communication failure:", err);
+      console.error('Network communication failure:', err);
       onErrorCatch('Could not link to server instance. Ensure your backend is running.');
     } finally {
       setLoading(false);

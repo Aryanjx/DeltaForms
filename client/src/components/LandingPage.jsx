@@ -27,7 +27,7 @@ export default function LandingPage({ darkMode, setDarkMode, onNavigateToAuth })
             
             {/* Dark / Light Toggle Switch */}
             <button 
-              onClick={() => setDarkMode(!darkMode)}
+              onClick={() => setDarkMode((prev) => !prev)}
               className="p-2 rounded-lg border border-slate-200 dark:border-slate-800 text-lg cursor-pointer transition-all hover:opacity-80"
               style={{ backgroundColor: 'var(--accent-bg)' }}
               title="Toggle Layout Theme"

@@ -1,15 +1,9 @@
 import express from 'express';
-import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import { requireAuth } from '../middleware/authMiddleware.js';
+import { signToken } from '../utils/jwt.js';
 
 const router = express.Router();
-const getJwtSecret = () => {
-  if (!process.env.JWT_SECRET) {
-    throw new Error('Missing JWT_SECRET environment variable');
-  }
-  return process.env.JWT_SECRET;
-};
 
 // 📝 REGISTRATION ENDPOINT
 router.post('/register', async (req, res) => {
@@ -27,7 +21,7 @@ router.post('/register', async (req, res) => {
     await newUser.save();
 
     // Generate token
-    const token = jwt.sign({ userId: newUser._id }, getJwtSecret(), { expiresIn: '7d' });
+    const token = signToken({ userId: newUser._id }, { expiresIn: '7d' });
 
     res.status(201).json({
       token,
@@ -64,7 +58,9 @@ router.post('/login', async (req, res) => {
     }
 
     // Generate token
-    const token = jwt.sign({ userId: user._id }, getJwtSecret(), { expiresIn: '7d' });
+    const token = signToken({ userId: user._id }, { expiresIn: '7d' });
+
+    res.status(200).json({
       token,
       user: { id: user._id, username: user.username, email: user.email, isPremium: user.isPremium }
     });

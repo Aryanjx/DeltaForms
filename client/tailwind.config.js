@@ -1,0 +1,13 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  // Force Tailwind to switch themes based on the <html> class
+  darkMode: 'class',
+  content: [
+    './index.html',
+    './src/**/*.{js,ts,jsx,tsx}',
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};

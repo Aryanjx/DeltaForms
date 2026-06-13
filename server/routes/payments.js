@@ -6,6 +6,7 @@ import User from '../models/User.js';
 const router = express.Router();
 const stripeKey = process.env.STRIPE_SECRET_KEY || 'sk_test_mock_placeholder_key_until_integrated';
 const stripe = new Stripe(stripeKey);
+const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
 
 // Endpoint 1: Initiates a checkout checkout pipeline window session
 router.post('/create-checkout-session', requireAuth, async (req, res) => {
@@ -24,10 +25,14 @@ router.post('/create-checkout-session', requireAuth, async (req, res) => {
         quantity: 1,
       }],
       mode: 'payment',
-      // Send the user ID inside the metadata so we can flag them as premium upon success
+      customer_email: req.user.email,
       client_reference_id: req.user._id.toString(),
-      success_url: 'http://localhost:5173/dashboard?payment=success',
-      cancel_url: 'http://localhost:5173/dashboard?payment=cancelled',
+      metadata: {
+        userId: req.user._id.toString(),
+        plan: 'premium'
+      },
+      success_url: `${clientUrl}/dashboard?payment=success`,
+      cancel_url: `${clientUrl}/dashboard?payment=cancelled`,
     });
 
     res.json({ url: session.url });

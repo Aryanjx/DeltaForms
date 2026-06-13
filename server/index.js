@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import connectDB from './config/db.js';
 import formRoutes from './routes/form.js';
 import aiRoutes from './routes/ai.js'; 
@@ -8,8 +10,10 @@ import authRoutes from './routes/auth.js';
 // 1. Import your brand new payment and subscription router
 import paymentRoutes from './routes/payments.js';
 
-// Load environmental variables from your .env file
-dotenv.config();
+// Load environmental variables from the server/.env file regardless of cwd
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 // Create the Express instance
 const app = express();

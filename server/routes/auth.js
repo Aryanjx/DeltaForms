@@ -1,9 +1,15 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+import { requireAuth } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback_super_secret_key_change_this';
+const getJwtSecret = () => {
+  if (!process.env.JWT_SECRET) {
+    throw new Error('Missing JWT_SECRET environment variable');
+  }
+  return process.env.JWT_SECRET;
+};
 
 // 📝 REGISTRATION ENDPOINT
 router.post('/register', async (req, res) => {
@@ -21,16 +27,23 @@ router.post('/register', async (req, res) => {
     await newUser.save();
 
     // Generate token
-    const token = jwt.sign({ userId: newUser._id }, JWT_SECRET, { expiresIn: '7d' });
+    const token = jwt.sign({ userId: newUser._id }, getJwtSecret(), { expiresIn: '7d' });
 
     res.status(201).json({
       token,
-      user: { id: newUser._id, username: newUser.username, email: newUser.email }
+      user: { id: newUser._id, username: newUser.username, email: newUser.email, isPremium: newUser.isPremium }
     });
   } catch (error) {
     console.error('Registration error:', error);
     res.status(500).json({ message: 'Server error during registration.' });
   }
+});
+
+// 🔒 PROFILE ENPOINT
+router.get('/me', requireAuth, (req, res) => {
+  const user = req.user.toObject();
+  delete user.password;
+  res.status(200).json({ user });
 });
 
 // 🔑 LOGIN ENDPOINT
@@ -51,11 +64,9 @@ router.post('/login', async (req, res) => {
     }
 
     // Generate token
-    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '7d' });
-
-    res.status(200).json({
+    const token = jwt.sign({ userId: user._id }, getJwtSecret(), { expiresIn: '7d' });
       token,
-      user: { id: user._id, username: user.username, email: user.email }
+      user: { id: user._id, username: user.username, email: user.email, isPremium: user.isPremium }
     });
   } catch (error) {
     console.error('Login error:', error);

@@ -32,6 +32,40 @@ export default function App() {
     }
   }, [darkMode]);
 
+  const fetchCurrentUser = async () => {
+    if (!token) return;
+
+    try {
+      const response = await fetch('http://127.0.0.1:5000/api/auth/me', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      if (!response.ok) {
+        return;
+      }
+
+      const data = await response.json();
+      setUser(data.user);
+      localStorage.setItem('user', JSON.stringify(data.user));
+    } catch (err) {
+      console.error('Error refreshing user profile:', err);
+    }
+  };
+
+  useEffect(() => {
+    if (token) {
+      fetchCurrentUser();
+    }
+  }, [token]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('payment') === 'success' && token) {
+      fetchCurrentUser();
+      setUpgradeMessage('Premium successfully unlocked! Restart your workflow to enjoy unlimited forms.');
+    }
+  }, [token]);
+
   const fetchSavedForms = async () => {
     if (!token) return;
 

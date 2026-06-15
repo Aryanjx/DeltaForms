@@ -24,7 +24,7 @@ connectDB();
 // Global Middleware Configuration
 // Update your CORS configuration to explicitly allow the Authorization header
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
+  origin: ['http://localhost:5173', 'http://127.0.0.1:5173', 'https://delta-forms-lemon.vercel.app'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'], // <-- 🔒 ALLOWS THE AUTH HEADER TO PASS
   credentials: true

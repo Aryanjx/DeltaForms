@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 
-const baseUrl = 'http://127.0.0.1:5000';
+const baseUrl = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000';
 
 const registerOrLogin = async () => {
   const credentials = { username: 'debuguser2', email: 'debuguser2@example.com', password: 'DebugPass123' };

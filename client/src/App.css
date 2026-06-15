@@ -5,6 +5,11 @@ html, body, #root {
   background-color: var(--bg-main);
   color: var(--text-main);
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  color-scheme: light;
+}
+
+html.dark, html.dark body, html.dark #root {
+  color-scheme: dark;
 }
 
 /* ☀️ LIGHT THEME STATE PARAMETERS */
@@ -19,6 +24,22 @@ html, body, #root {
   --border: #e2e8f0;          /* Slate-200 lines */
   --social-bg: #ffffff;
   --text-h: #0f172a;
+}
+
+/* Fallback to system preference when no .dark class is present */
+@media (prefers-color-scheme: dark) {
+  :root:not(.dark) {
+    --bg-main: #020617;         /* Slate-950 canvas background */
+    --bg-surface: #0f172a;      /* Slate-900 surface panels */
+    --text-main: #f8fafc;       /* Crisp slate-50 active typography */
+    --text-muted: #94a3b8;      /* Slate-400 description blocks */
+    --accent: #2dd4bf;          /* Teal-400 primary branding components */
+    --accent-bg: #0f172a;       /* Slate-900 background layers */
+    --accent-border: #1e293b;   /* Slate-800 accents */
+    --border: #1e293b;          /* Slate-800 line blocks */
+    --social-bg: #1e293b;
+    --text-h: #f8fafc;
+  }
 }
 
 /* 🌙 DARK THEME STATE PARAMETERS (Automatically active when .dark class is added) */

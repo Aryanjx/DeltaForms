@@ -120,7 +120,7 @@ const styles = {
   form: { display: 'flex', flexDirection: 'column', gap: '16px' },
   inputGroup: { display: 'flex', flexDirection: 'column', gap: '6px' },
   label: { fontSize: '14px', fontWeight: '600', color: '#4a4a4a' },
-  input: { padding: '10px 14px', borderRadius: '6px', border: '1px solid #ccc', fontSize: '15px', outline: 'none' },
+  input: { padding: '10px 14px', borderRadius: '6px', border: '1px solid #ccc', fontSize: '15px', outline: 'none', color: '#1a1a1a', backgroundColor: '#fff' },
   button: { padding: '12px', borderRadius: '6px', border: 'none', background: '#4F46E5', color: '#fff', fontSize: '16px', fontWeight: '600', cursor: 'pointer', marginTop: '10px' },
   error: { background: '#FEE2E2', color: '#991B1B', padding: '10px', borderRadius: '6px', fontSize: '14px', marginBottom: '16px', textAlign: 'center' },
   toggleText: { textAlign: 'center', marginTop: '20px', fontSize: '14px', color: '#6b7280' },

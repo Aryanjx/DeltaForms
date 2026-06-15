@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { getApiUrl, getAuthHeaders } from '../utils/api';
 
 export default function PromptInput({ onFormGenerated, onErrorCatch }) {
   const [prompt, setPrompt] = useState('');
@@ -19,7 +20,7 @@ export default function PromptInput({ onFormGenerated, onErrorCatch }) {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/ai/generate-layout', {
+      const response = await fetch(getApiUrl('/api/ai/generate-layout'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

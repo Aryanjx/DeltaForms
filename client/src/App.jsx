@@ -5,6 +5,7 @@ import FormRenderer from './components/FormRenderer';
 import FormHistory from './components/FormHistory';
 import HistoryPage from './components/HistoryPage';
 import LandingPage from './components/LandingPage';
+import { getApiUrl, getAuthHeaders } from './utils/api';
 
 export default function App() {
   const [token, setToken] = useState(localStorage.getItem('token'));
@@ -77,8 +78,8 @@ export default function App() {
     if (!token) return;
 
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/auth/me', {
-        headers: { Authorization: `Bearer ${token}` }
+      const response = await fetch(getApiUrl('/api/auth/me'), {
+        headers: getAuthHeaders()
       });
 
       if (!response.ok) {
@@ -111,8 +112,8 @@ export default function App() {
     if (!token) return;
 
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/forms', {
-        headers: { Authorization: `Bearer ${token}` }
+      const response = await fetch(getApiUrl('/api/forms'), {
+        headers: getAuthHeaders()
       });
 
       if (!response.ok) {
@@ -144,9 +145,9 @@ export default function App() {
     if (!token) return;
 
     try {
-      const response = await fetch(`http://127.0.0.1:5000/api/forms/${formId}`, {
+      const response = await fetch(getApiUrl(`/api/forms/${formId}`), {
         method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` }
+        headers: getAuthHeaders()
       });
 
       if (!response.ok) {
@@ -170,9 +171,9 @@ export default function App() {
 
   const handleUpgrade = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/payments/create-checkout-session', {
+      const response = await fetch(getApiUrl('/api/payments/create-checkout-session'), {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: getAuthHeaders()
       });
       const data = await response.json();
       if (data.url) window.location.href = data.url; 

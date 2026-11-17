@@ -10,8 +10,6 @@ An AI-powered, full-stack SaaS form generation platform that transforms natural 
 - **Dynamic Preview Canvas:** A real-time React render canvas that dynamically builds inputs, textareas, dropdowns, and rating components instantly from the AI payload.
 - **SaaS Core Layout:** Modern, high-converting landing page showcasing glassmorphic aesthetics, fluid responsive layouts, interactive pricing modules, and functional FAQ accordions.
 - **Flexible Data Layer:** Utilizing MongoDB's document-based store to easily house variable length, unstructured form blueprints without complex database migrations.
-- **Tier-Based Access:** Integrated premium account filters (`💎 Premium Account` vs `🌱 Free Tier`) structurally bound to automated Stripe checkout pipelines.
-
 ---
 
 ## 🛠️ Tech Stack
@@ -29,7 +27,6 @@ An AI-powered, full-stack SaaS form generation platform that transforms natural 
 
 ### Core Services
 - **AI Core Engine:** Google Gemini Pro API (`@google/genai` Node SDK)
-- **Payment Processing:** Stripe Node Gateway
 
 ---
 
